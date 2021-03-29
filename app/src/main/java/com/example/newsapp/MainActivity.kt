@@ -4,6 +4,8 @@ import android.graphics.drawable.ClipDrawable.VERTICAL
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -24,11 +26,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainActivity : AppCompatActivity() {
 
     lateinit var recyclerViewAdapters: recyclerViewAdapter
-
+lateinit var progress: ProgressBar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+progress = findViewById(R.id.progress)
 
         recycleGet()
      getList()
@@ -57,11 +59,13 @@ val viewModel = ViewModelProviders.of(this).get(RecyclerActivityViewModel::class
                 recyclerViewAdapters.setListData(it.articles as ArrayList<dataClass>)
                 Log.i("data",it.articles.toString())
                 recyclerViewAdapters.notifyDataSetChanged()
-            }
-            else{
-                Toast.makeText(this,"Some Error",Toast.LENGTH_LONG).show()
 
             }
+            else{
+                Toast.makeText(this,"API Limit Reached",Toast.LENGTH_LONG).show()
+
+            }
+            progress.visibility = View.INVISIBLE
         })
         viewModel.makeApiCall()
 
